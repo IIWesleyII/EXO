@@ -19,9 +19,11 @@ def get_table(driver):
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'results')))
     except TimeoutException:
-        pass  # Handle the exception here
-    table = driver.find_element("id", "results").get_attribute('innerHTML')
-    print(table)
+        print('web driver failure')
+        driver.quit() 
+
+    table = driver.find_element("id", "results")
+    print(table.text)
 
 x=Service('C:\Program Files (x86)\chromedriver.exe')
 driver = webdriver.Chrome(service=x)
