@@ -16,12 +16,6 @@ def get_title(driver):
     return driver.title
 
 def get_table(driver):
-    '''
-    1. init lists to hold data for dataframe
-    2. get max page
-    3. set while loop to     while page <= max_page
-    4. create web driver for each page , each time loading into dataframe
-    '''
     planet_name = []
     dist_from_earth = []
     planet_mass = []
@@ -29,16 +23,32 @@ def get_table(driver):
     discovery_date = []
 
     # max_pages is the number of pages in the table
-    max_pages = WebDriverWait(driver, 10).until(EC.presence_of_element_located((
+    max_page = WebDriverWait(driver, 10).until(EC.presence_of_element_located((
         By.XPATH, '//*[@id="primary_column"]/div[1]/div[2]/div[1]/div/nav/div/span'))).text
+    page = 1
 
-    try:
-       table = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'results')))
-    except TimeoutException:
-        print('web driver failure')
-        driver.quit() 
+    while page <= int(max_page):
+        try:
+            table = WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((
+                By.CLASS_NAME, "exoplanet")))
+           
+            for row in table:
+                planet_name.append( row.find_element(By.CLASS_NAME, "display_name").text )
+                dist_from_earth.append( row.find_element(By.CLASS_NAME, "st_dist").text )
+                planet_mass.append( row.find_element(By.CLASS_NAME, "mass_display").text )
+                stellar_magnitude.append( row.find_element(By.CLASS_NAME, "st_optmag").text )
+                discovery_date.append( row.find_element(By.CLASS_NAME, "discovery_date").text )
 
-    print(table.text)
+            page += 1
+            print(f'page:{page}')
+            WebDriverWait(driver,10).until(EC.element_to_be_clickable((
+                By.CSS_SELECTOR,"next"))).click()
+            
+        except TimeoutException:
+            print('web driver failure')
+            driver.quit() 
+
+    print(planet_name)
 
 x=Service('C:\Program Files (x86)\chromedriver.exe')
 driver = webdriver.Chrome(service=x)
