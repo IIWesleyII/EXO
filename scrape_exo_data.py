@@ -21,15 +21,14 @@ def generate_exoplanet_df(driver):
     discovery_date = []
 
     # max_pages is the number of pages in the table
-    max_page = WebDriverWait(driver, 10).until(EC.presence_of_element_located((
+    max_page = WebDriverWait(driver, 5).until(EC.presence_of_element_located((
         By.XPATH, '//*[@id="primary_column"]/div[1]/div[2]/div[1]/div/nav/div/span'))).text
     page = 1
 
     while page <= int(max_page):
-        driver.refresh()
         
         try:
-            table = WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((
+            table = WebDriverWait(driver, 5).until(EC.visibility_of_all_elements_located((
                 By.CLASS_NAME, "exoplanet")))
         except TimeoutException:
             print('WEB DRIVER FAILURE')
@@ -42,13 +41,10 @@ def generate_exoplanet_df(driver):
             stellar_magnitude.append(row.find_element(By.CLASS_NAME, "st_optmag").text)
             discovery_date.append(row.find_element(By.CLASS_NAME, "discovery_date").text)
 
-        
-        next_page = WebDriverWait(driver,10).until(EC.element_to_be_clickable((
-            By.XPATH, "//*[@id='primary_column']/footer/div/div/div/nav/span[2]/a")))
-
+        WebDriverWait(driver,5).until(EC.element_to_be_clickable((
+            By.XPATH, "//*[@id='primary_column']/footer/div/div/div/nav/span[2]/a"))).click() 
+        time.sleep(1)
         page += 1
-
-
 
     df = pd.DataFrame({"Planet Name" : planet_name, "Distance From Earth" : dist_from_earth, "Planet Mass" : planet_mass,
     "Stellar Magnitude" : stellar_magnitude, "Discovery Date" : discovery_date})
@@ -57,18 +53,13 @@ def generate_exoplanet_df(driver):
 
 x=Service('C:\Program Files (x86)\chromedriver.exe')
 driver = webdriver.Chrome(service=x)
-
-#url = 'https://exoplanets.nasa.gov/discovery/exoplanet-catalog/'
 driver.get('https://exoplanets.nasa.gov/discovery/exoplanet-catalog/')
 
-# get title
-#print(get_title(driver))
-
 # generate exoplanet dataframe
-print(generate_exoplanet_df(driver))
+df = generate_exoplanet_df(driver)
+df.to_csv('exoplanets.csv',index=False)
 
 
 # To keep the browser open fo 50 seconds
 time.sleep(50)
 driver.quit() 
-
