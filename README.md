@@ -1,5 +1,9 @@
 # EXO
 
-# https://stackoverflow.com/questions/52448137/python-selenium-scrape-the-whole-table
+Data table for all discovered exoplanets.
 
-# https://selenium-python.readthedocs.io/
+- Data scraped from https://exoplanets.nasa.gov/discovery/exoplanet-catalog/
+
+![Table Example](exo_data_table.png)
+
+### https://selenium-python.readthedocs.io/
