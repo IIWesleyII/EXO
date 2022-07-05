@@ -5,3 +5,4 @@ html5lib
 selenium
 psycopg2
 python-dotenv
+flask
