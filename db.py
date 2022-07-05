@@ -15,14 +15,15 @@ CREATE TABLE IF NOT EXISTS exoplanets(
     );
 
 '''
-csv_path = r'C:\Users\Sunny\Desktop\exo\exoplanets.csv'
+
+csv_path = os.getenv('CSV_PATH')
 ADD_EXOPLANETS = f'''
 COPY exoplanets(
-    planet_name, 
-    dist_from_earth, 
-    planet_mass,
-    stellar_magnitude,
-    discovery_date
+        planet_name, 
+        dist_from_earth, 
+        planet_mass,
+        stellar_magnitude,
+        discovery_date
     )
     FROM '{csv_path}'
     DELIMITER ','
@@ -43,11 +44,13 @@ def connect_db():
 
     return conn
     
+
 def create_table(conn): 
     with conn:
         cursor = conn.cursor()
         cursor.execute(CREATE_EXOPLANET_TABLE)
         cursor.close()
+
 
 def add_planets(conn):
     with conn:

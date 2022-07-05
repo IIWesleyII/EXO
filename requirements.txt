@@ -6,3 +6,5 @@ selenium
 psycopg2
 python-dotenv
 flask
+SQLAlchemy
+Flask-SQLAlchemy

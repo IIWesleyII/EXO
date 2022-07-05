@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Planet Name</th>
+        <th>Distance From Earth</th>
+        <th>Planet Mass</th>
+        <th>Stellar Magnitude</th>
+        <th>Discovery Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for exoplanet in exoplanets %}
+        <tr>
+          <td>{{ exoplanet.planet_name }}</td>
+          <td>{{ exoplanet.dist_from_earth }}</td>
+          <td>{{ exoplanet.planet_mass }}</td>
+          <td>{{ exoplanet.stellar_magnitude }}</td>
+          <td>{{ exoplanet.discovery_date }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        columns: [
+          null,
+          {searchable: false},
+          {orderable: false, searchable: false},
+          {orderable: false, searchable: false},
+          null],
+      });
+    });
+  </script>
+{% endblock %}
