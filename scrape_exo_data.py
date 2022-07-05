@@ -60,6 +60,5 @@ df = generate_exoplanet_df(driver)
 df.to_csv('exoplanets.csv',index=False)
 
 
-# To keep the browser open fo 50 seconds
-time.sleep(50)
+time.sleep(5)
 driver.quit() 
